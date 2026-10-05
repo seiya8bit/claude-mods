@@ -7,6 +7,8 @@ const LABEL: Record<string, string> = { five_hour: '5h', seven_day: '1w' }
 // behind a zero-width space (never leading whitespace)
 const GAP = '\u2800\u2800'
 const SPACE = '\u200b '
+// before the model name: one blank, half the gap between windows
+const END_GAP = '\u2800'
 
 const colorOf = (pct: number) => (pct >= 90 ? '#e5534b' : pct >= 70 ? '#d29922' : undefined)
 const PCT_COLOR: Record<string, string> = { five_hour: '#56b4e9', seven_day: '#2ec4a0' }
@@ -46,12 +48,12 @@ export const register: Register = on => {
               <Text color={TEXT}>{(i > 0 || modes ? GAP : '') + (LABEL[r.kind] ?? r.kind)}</Text>
               <Text bold={!!color} color={color ?? PCT_COLOR[r.kind] ?? TEXT}>{Math.round(r.percentUsed)}%</Text>
               {showReset && (
-                <Text color={color ?? TEXT}>{`${SPACE}↻ ${resetLabel(r.resetsAt!, now)}`}</Text>
+                <Text color={color}>{`${SPACE}↻ ${resetLabel(r.resetsAt!, now)}`}</Text>
               )}
             </Box>
           )
         })}
-        <Text>{GAP}</Text>
+        <Text>{END_GAP}</Text>
       </Box>
     )
   })
