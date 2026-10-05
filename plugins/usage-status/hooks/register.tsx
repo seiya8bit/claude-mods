@@ -3,11 +3,14 @@ import type { Register } from 'claude-code'
 const LABEL: Record<string, string> = { five_hour: '5h', seven_day: '1w' }
 
 // ponytail: the desktop footer ignores Box gaps and drops whitespace-only text, so space with a
-// braille blank, and a zero-width space + quarter-em space for half that
-const GAP = '\u2800'
+// braille blank + quarter-em space, and a zero-width space + quarter-em space for the smaller gap
+const GAP = '⠀ '
 const HALF_GAP = '\u200b\u2005'
 
 const colorOf = (pct: number) => (pct >= 90 ? '#e5534b' : pct >= 70 ? '#d29922' : undefined)
+const PCT_COLOR: Record<string, string> = { five_hour: '#56b4e9', seven_day: '#2ec4a0' }
+// the footer mutes plain text; the theme's own text color matches the model name beside it
+const TEXT = 'text'
 
 const resetLabel = (iso: string, now: number) => {
   const d = new Date(iso)
@@ -32,17 +35,17 @@ export const register: Register = on => {
 
     return (
       <Box>
-        {modes && <Text dimColor>{modes}</Text>}
+        {modes && <Text color={TEXT}>{modes}</Text>}
         {rateLimits.map((r, i) => {
           const color = colorOf(r.percentUsed)
           // weekly reset always; the others only near the limit
           const showReset = r.resetsAt && (color || r.kind === 'seven_day')
           return (
             <Box key={r.kind} gap={1}>
-              <Text dimColor>{(i > 0 || modes ? GAP : '') + (LABEL[r.kind] ?? r.kind)}</Text>
-              <Text bold={!!color} color={color}>{Math.round(r.percentUsed)}%</Text>
+              <Text color={TEXT}>{(i > 0 || modes ? GAP : '') + (LABEL[r.kind] ?? r.kind)}</Text>
+              <Text bold={!!color} color={color ?? PCT_COLOR[r.kind] ?? TEXT}>{Math.round(r.percentUsed)}%</Text>
               {showReset && (
-                <Text color={color} dimColor={!color}>{`${HALF_GAP}↻${resetLabel(r.resetsAt!, now)}`}</Text>
+                <Text color={color ?? TEXT}>{`${HALF_GAP}↻\u2005${resetLabel(r.resetsAt!, now)}`}</Text>
               )}
             </Box>
           )
