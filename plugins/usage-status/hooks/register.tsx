@@ -2,7 +2,7 @@ import type { Register } from 'claude-code'
 
 const LABEL: Record<string, string> = { five_hour: '5h', seven_day: '1w' }
 
-// ponytail: the desktop footer ignores Box gaps, drops whitespace-only text and renders every
+// The desktop footer ignores Box gaps, drops whitespace-only text and renders every
 // Unicode space as one plain space, so a wide gap is braille blanks and a narrow one a space
 // behind a zero-width space (never leading whitespace)
 const GAP = '\u2800\u2800'
