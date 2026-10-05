@@ -1,0 +1,12 @@
+{
+  "name": "claude-mods",
+  "owner": { "name": "seiya8bit" },
+  "description": "Claude Code mods by seiya8bit",
+  "plugins": [
+    {
+      "name": "usage-status",
+      "source": "./plugins/usage-status",
+      "description": "Rate-limit usage (5h, 1w) in the prompt footer"
+    }
+  ]
+}

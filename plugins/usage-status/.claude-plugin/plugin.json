@@ -1,0 +1,1 @@
+{ "name": "usage-status", "version": "1.0.0", "description": "Rate-limit usage (5h, 1w) in the prompt footer" }
