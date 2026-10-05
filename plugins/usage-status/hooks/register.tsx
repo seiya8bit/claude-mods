@@ -2,10 +2,11 @@ import type { Register } from 'claude-code'
 
 const LABEL: Record<string, string> = { five_hour: '5h', seven_day: '1w' }
 
-// ponytail: the desktop footer ignores Box gaps and drops whitespace-only text, so space with a
-// braille blank + quarter-em space, and a zero-width space + quarter-em space for the smaller gap
-const GAP = '⠀ '
-const HALF_GAP = '\u200b\u2005'
+// ponytail: the desktop footer ignores Box gaps, drops whitespace-only text and renders every
+// Unicode space as one plain space, so a wide gap is braille blanks and a narrow one a space
+// behind a zero-width space (never leading whitespace)
+const GAP = '\u2800\u2800'
+const SPACE = '\u200b '
 
 const colorOf = (pct: number) => (pct >= 90 ? '#e5534b' : pct >= 70 ? '#d29922' : undefined)
 const PCT_COLOR: Record<string, string> = { five_hour: '#56b4e9', seven_day: '#2ec4a0' }
@@ -45,11 +46,12 @@ export const register: Register = on => {
               <Text color={TEXT}>{(i > 0 || modes ? GAP : '') + (LABEL[r.kind] ?? r.kind)}</Text>
               <Text bold={!!color} color={color ?? PCT_COLOR[r.kind] ?? TEXT}>{Math.round(r.percentUsed)}%</Text>
               {showReset && (
-                <Text color={color ?? TEXT}>{`${HALF_GAP}↻\u2005${resetLabel(r.resetsAt!, now)}`}</Text>
+                <Text color={color ?? TEXT}>{`${SPACE}↻ ${resetLabel(r.resetsAt!, now)}`}</Text>
               )}
             </Box>
           )
         })}
+        <Text>{GAP}</Text>
       </Box>
     )
   })
